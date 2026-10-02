@@ -3067,8 +3067,9 @@ ReplicatedStorage.Update.OnServerEvent:Connect(function(Player, Buffer : buffer)
 	if Character then
 		local PrimaryPart = workspace.Hurtboxes:FindFirstChild(`{Character}__SS`)
 		if PrimaryPart then
-			local R02, R22 = Buffer and tonumber(buffer.readf32(Buffer, 0)), Buffer and tonumber(buffer.readf32(Buffer, 4))
-			if not R02 or not R22 then
+			local IsValid = typeof(Buffer) == "buffer" and buffer.len(Buffer) == 8
+			local R02, R22 = IsValid and buffer.readf32(Buffer, 0), IsValid and buffer.readf32(Buffer, 4)
+			if not R02 or not R22 or R02 ~= R02 or R22 ~= R22 or math.abs(R02) == math.huge or math.abs(R22) == math.huge then
 				CameraCFrames[Character] = nil
 			else
 				CameraCFrames[Character] = math.atan2(R02, R22)
